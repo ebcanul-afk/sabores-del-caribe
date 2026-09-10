@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sabores del Caribe - Alta Gastronomía</title>
+    <link rel="stylesheet" href="styles.css">
+    
+    <!-- Librería externa para Confeti VIP -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    <!-- Librería externa para Escáner QR VIP -->
+    <script src="https://unpkg.com/html5-qrcode"></script>
+</head>
+<body>
+
+    <!-- Audio para Acceso VIP -->
+    <audio id="soundVIP" src="https://assets.mixkit.co/active_storage/sfx/2013/2013-preview.mp3" preload="auto"></audio>
+
+    <!-- BANNER VIP (Oculto por defecto) -->
+    <div class="vip-banner" id="vipBanner" style="display: none;">
+        <div class="vip-badge-content">
+            <span class="vip-crown">👑</span>
+            <div>
+                <h3 id="vipNombre">¡Bienvenido VIP!</h3>
+                <p id="vipMembresia">Membresía Honoraria</p>
+            </div>
+        </div>
+        <div class="vip-actions">
+            <span class="vip-status-dot">● Sesión VIP Activa</span>
+            <button class="btn-logout-vip" onclick="cerrarSesionVIP()">Cerrar Sesión VIP</button>
+        </div>
+    </div>
+
+    <!-- HEADER / NAVBAR -->
+    <header class="header">
+        <div class="nav-container">
+            <a href="#" class="logo">
+                <span class="logo-icon">✦</span> Sabores del Caribe
+            </a>
+            <ul class="nav-menu">
+                <li><a href="#menu" class="nav-link">Menú</a></li>
+                <li><a href="#reservas" class="nav-link">Reservas</a></li>
+                <li><a href="#contacto" class="nav-link">Contacto</a></li>
+                <li><a href="#empleos" class="nav-link">Empleos</a></li>
+            </ul>
+            <div class="header-actions">
+                <button class="btn-tool btn-vip-trigger" onclick="abrirModalVIP()">👑 Acceso VIP</button>
+                <button class="btn-tool" onclick="cambiarPaletteTexto()">🎨 Color Realce</button>
+                <button class="btn-tool" id="btnTheme" onclick="toggleDarkMode()">🌙 Modo Oscuro</button>
+                <button class="btn-tool" onclick="toggleCart()">🛒 Carrito</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- HERO SECTION -->
+    <section class="hero">
+        <div class="hero-bg"></div>
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <span class="badge">✦ MICHELIN GUIDE SELECTED 2026 ✦</span>
+            <h1>Alta Gastronomía Caribeña</h1>
+            <p>Una fusión sensorial impecable entre el mar, la tradición y la vanguardia.</p>
+            <div class="hero-buttons">
+                <a href="#reservas" class="btn btn-primary">Reservar Mesa VIP</a>
+                <a href="#menu" class="btn btn-outline">Explorar Menú</a>
+            </div>
+            <div class="hero-stats">
+                <div class="stat-item">
+                    <span class="stat-num">4.9 ★</span>
+                    <span class="stat-label">Valoración</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-num">100%</span>
+                    <span class="stat-label">Ingredientes Frescos</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-num">2026</span>
+                    <span class="stat-label">Edición Especial</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <main class="container">
+        
+        <!-- SECCIÓN MENÚ -->
+        <section class="section" id="menu">
+            <div class="section-title">
+                <h2>Menú de Autor</h2>
+                <p>Filtra nuestros platillos exclusivos creados por el Chef Ejecutivo</p>
+            </div>
+
+            <div class="filter-bar">
+                <button class="filter-btn active" onclick="filtrarMenu('todos', this)">Todos</button>
+                <button class="filter-btn" onclick="filtrarMenu('mariscos', this)">Mariscos</button>
+                <button class="filter-btn" onclick="filtrarMenu('cortes', this)">Cortes Premium</button>
+                <button class="filter-btn" onclick="filtrarMenu('postres', this)">Postres</button>
+            </div>
+
+            <div class="menu-grid" id="menuGrid">
+                
+                <!-- Tarjeta 1 -->
+                <article class="menu-card" data-category="mariscos">
+                    <img src="https://images.unsplash.com/photo-1535399831218-d5bd36d1a6b3?auto=format&fit=crop&w=600&q=80" alt="Ceviche Caribeño">
+                    <span class="card-badge">Fresco</span>
+                    <div class="card-content">
+                        <div class="card-header">
+                            <h3>Ceviche Caribeño</h3>
+                            <span class="price">$180 MXN</span>
+                        </div>
+                        <p>Pesca del día con jugo de lima, cubos de mango maduro, cilantro y leche de tigre con agua de coco.</p>
+                        <div class="card-footer">
+                            <span class="tag">Mariscos</span>
+                            <button class="btn-sm" onclick="agregarAlPedido('Ceviche Caribeño', 180)">+ Agregar</button>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Tarjeta 2 -->
+                <article class="menu-card" data-category="mariscos">
+                    <img src="https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=600&q=80" alt="Pulpo a las Brasas">
+                    <span class="card-badge vip-only">Especialidad</span>
+                    <div class="card-content">
+                        <div class="card-header">
+                            <h3>Pulpo a las Brasas</h3>
+                            <span class="price">$260 MXN</span>
+                        </div>
+                        <p>Tentáculo de pulpo braseado, cremoso de yuca y reducción de pimientos ahumados.</p>
+                        <div class="card-footer">
+                            <span class="tag">Chef Choice</span>
+                            <button class="btn-sm" onclick="agregarAlPedido('Pulpo a las Brasas', 260)">+ Agregar</button>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Tarjeta 3 -->
+                <article class="menu-card" data-category="cortes">
+                    <img src="https://images.unsplash.com/photo-1558030006-450675393462?auto=format&fit=crop&w=600&q=80" alt="Ribeye Angus">
+                    <span class="card-badge vip-only">VIP Premium</span>
+                    <div class="card-content">
+                        <div class="card-header">
+                            <h3>Ribeye Angus (400g)</h3>
+                            <span class="price">$420 MXN</span>
+                        </div>
+                        <p>Corte de res madurado servido con mofongo tradicional de plátano verde y demi-glace de la casa.</p>
+                        <div class="card-footer">
+                            <span class="tag">Cortes</span>
+                            <button class="btn-sm" onclick="agregarAlPedido('Ribeye Angus (400g)', 420)">+ Agregar</button>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Tarjeta 4 -->
+                <article class="menu-card" data-category="postres">
+                    <img src="https://images.unsplash.com/photo-1551024709-8f23befc6f87?auto=format&fit=crop&w=600&q=80" alt="Degustación Dulce">
+                    <span class="card-badge">Dulce</span>
+                    <div class="card-content">
+                        <div class="card-header">
+                            <h3>Degustación Dulce</h3>
+                            <span class="price">$120 MXN</span>
+                        </div>
+                        <p>Selección artesanal del pastry chef con merengue suizo, crema de maracuyá y frutos del bosque.</p>
+                        <div class="card-footer">
+                            <span class="tag">Postre</span>
+                            <button class="btn-sm" onclick="agregarAlPedido('Degustación Dulce', 120)">+ Agregar</button>
+                        </div>
+                    </div>
+                </article>
+
+            </div>
+        </section>
+
+        <!-- SECCIÓN RESERVAS -->
+        <section class="section" id="reservas">
+            <div class="section-title">
+                <h2>Reservación en Línea</h2>
+                <p>Asegura tu lugar en nuestra experiencia gastronómica</p>
+            </div>
+            <div class="card-box">
+                <form id="formReserva" onsubmit="event.preventDefault(); procesarReserva();">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="nombre">Nombre Completo</label>
+                            <input type="text" id="nombre" placeholder="Tu nombre..." required>
+                        </div>
+                        <div class="form-group">
+                            <label for="fecha">Fecha y Hora</label>
+                            <input type="datetime-local" id="fecha" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="personas">Número de Personas</label>
+                            <select id="personas">
+                                <option value="2">2 Personas</option>
+                                <option value="4">4 Personas</option>
+                                <option value="6">6 Personas</option>
+                                <option value="8+">8+ Personas (Mesa VIP)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">Confirmar Reserva</button>
+                </form>
+                <div id="mensajeReserva" class="feedback-msg"></div>
+            </div>
+        </section>
+
+        <!-- SECCIÓN CONTACTO -->
+        <section class="section" id="contacto">
+            <div class="section-title">
+                <h2>Ubicación y Contacto</h2>
+                <p>Visítanos o ponte en contacto con nuestro equipo de atención</p>
+            </div>
+            <div class="contacto-grid">
+                <div class="card-box">
+                    <div class="contact-item">
+                        <span class="c-icon">📍</span>
+                        <div>
+                            <h4>Dirección</h4>
+                            <p>Av. Bonampak, Zona Hotelera, Cancún, Q.R.</p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <span class="c-icon">📞</span>
+                        <div>
+                            <h4>Teléfono & WhatsApp</h4>
+                            <p>+52 998 881 2345</p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <span class="c-icon">✉️</span>
+                        <div>
+                            <h4>Correo Electrónico</h4>
+                            <p>contacto@saboresdelcaribe.com</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-box map-placeholder">
+                    <iframe src="https://maps.google.com/maps?q=Cancun%20Zona%20Hotelera&t=&z=13&ie=UTF8&iwloc=&output=embed" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+                    <div class="map-badge">📍 Ubicación Principal</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECCIÓN EMPLEOS -->
+        <section class="section" id="empleos">
+            <div class="section-title">
+                <h2>Únete a Nuestro Equipo</h2>
+                <p>Buscamos talentos apasionados por la alta cocina</p>
+            </div>
+            <div class="card-box">
+                <form id="formTrabajo" onsubmit="event.preventDefault(); enviarPostulacion();">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="candidatoNombre">Nombre Completo</label>
+                            <input type="text" id="candidatoNombre" placeholder="Tu nombre..." required>
+                        </div>
+                        <div class="form-group">
+                            <label for="puesto">Puesto de Interés</label>
+                            <select id="puesto">
+                                <option value="Chef de Partie">Chef de Partie</option>
+                                <option value="Sommelier">Sommelier</option>
+                                <option value="Host / Hostess">Host / Hostess</option>
+                                <option value="Mixólogo">Mixólogo</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-secondary btn-block">Postular Candidatura</button>
+                </form>
+                <div id="mensajeTrabajo" class="feedback-msg"></div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- MODAL VIP -->
+    <div class="modal-overlay" id="modalVIP" style="display: none;">
+        <div class="modal-content">
+            <button class="modal-close" onclick="cerrarModalVIP()">&times;</button>
+            <h3>👑 Portal de Verificación VIP</h3>
+            <p style="font-size: 13px; color: var(--text-muted);">Ingresa tu clave de socio o escanea tu credencial digital</p>
+            
+            <div class="vip-tabs">
+                <button class="tab-btn active" onclick="cambiarTabVIP('pin', this)">Ingresar PIN</button>
+                <button class="tab-btn" onclick="cambiarTabVIP('qr', this)">Escanear QR</button>
+            </div>
+
+            <!-- Sección PIN -->
+            <div id="secPin">
+                <div class="form-group" style="margin-bottom: 16px;">
+                    <input type="text" id="inputPinVIP" placeholder="Ej. VIP-LUIS-AGUIRRE-2026">
+                </div>
+                <button class="btn btn-primary btn-block" onclick="validarPinVIP()">Validar Membresía</button>
+            </div>
+
+            <!-- Sección QR -->
+            <div id="secQR" style="display: none;">
+                <div id="reader" style="width: 100%; min-height: 220px; background: var(--bg-main); border-radius: var(--radius-md);"></div>
+            </div>
+
+            <div id="msgVIP" class="feedback-msg"></div>
+        </div>
+    </div>
+
+    <!-- CARRITO FLOTANTE (DRAWER) -->
+    <div class="cart-drawer" id="cartDrawer">
+        <div class="cart-header">
+            <strong>🛒 Mi Pedido</strong>
+            <button class="cart-close" onclick="toggleCart()">&times;</button>
+        </div>
+        <div class="cart-body" id="cartItems">
+            <p class="empty-cart">No has agregado elementos aún.</p>
+        </div>
+        <div class="cart-footer">
+            <div class="cart-total">
+                <span>Total:</span>
+                <strong id="cartTotalAmount">$0 MXN</strong>
+            </div>
+            <button class="btn btn-primary btn-block" onclick="enviarPedidoWhatsApp()">Enviar Pedido por WhatsApp 💬</button>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <p>&copy; 2026 Sabores del Caribe. Todos los derechos reservados. Michelin Selected 2026.</p>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+</html>
